@@ -1,7 +1,19 @@
 <div ng-controller="EditCtrl">
   <ion-view view-title="Notes">
     <<ion-content>
-        {{nota.descripcion}}
+        <div class="list card">
+            <div class="item-input">
+                <input type="text" ng-model="nota.titulo">
+            </div>
+            <div class="item-input">
+                <textarea name="" id="" cols="30" rows="10" ng-model="nota.descripcion"></textarea>
+            </div>
+        </div>
+        <div class="list card">
+            <div class="padding">
+                <button class="button button-block button-positive" ng-click="save()"> Guardar </button>
+            </div>
+        </div>
     </ion-content>
 </ion-view>  
 </div>

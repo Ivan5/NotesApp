@@ -11,6 +11,15 @@
             return nota.id === id;
         })[0];
     }
+    
+    function updateNota(nota){
+        for(var i = 0;i<notas.length; i++){
+            if(notas[i].id === nota.id){
+                notas[i] = nota;
+                return;
+            }
+        }
+    }
     app.config(function($stateProvider, $urlRouterProvider){
         $stateProvider.state('list',{
            url:'/list',
@@ -28,7 +37,11 @@
     
     app.controller('EditCtrl',function($scope, $state){
        $scope.id = $state.params.id; 
-       $scope.nota = getNota($scope.id);
+       $scope.nota = angular.copy(getNota($scope.id));
+       $scope.save = function(){
+           updateNota($scope.nota);
+           $state.go('list');
+       };
     });
 
 app.run(function($ionicPlatform) {
