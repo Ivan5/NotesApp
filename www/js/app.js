@@ -1,4 +1,3 @@
-
 (function(){
     var app = angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
     var notas = [
@@ -20,6 +19,10 @@
             }
         }
     }
+    
+    function createNota(nota){
+        notas.push(nota);
+    }
     app.config(function($stateProvider, $urlRouterProvider){
         $stateProvider.state('list',{
            url:'/list',
@@ -27,8 +30,16 @@
         });
         $stateProvider.state('edit',{
            url:'/edit/:id',
+            controller: 'EditCtrl',
            templateUrl:'templates/edit.html'
         });
+        
+        $stateProvider.state('create',{
+           url:'/create',
+           controller: 'CreateCtrl',
+           templateUrl:'templates/edit.html'
+        });
+        
         $urlRouterProvider.otherwise('/list');
     });
     app.controller('listCtrl',function($scope){
@@ -40,6 +51,14 @@
        $scope.nota = angular.copy(getNota($scope.id));
        $scope.save = function(){
            updateNota($scope.nota);
+           $state.go('list');
+       };
+    });
+    
+    app.controller('CreateCtrl',function($scope, $state){
+       $scope.nota = {id: new Date().getTime().toString(), title:'', descripcion:''}
+       $scope.save = function(){
+           createNota($scope.nota);
            $state.go('list');
        };
     });
