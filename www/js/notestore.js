@@ -2,11 +2,10 @@
 var app = angular.module('starter.notestore', []);
     
     app.factory('NoteStore', function(){
-       var notas = [
-         { id: '1', titulo: 'Nota 1', descripcion: 'Descripcion 1' },
-         { id: '2', titulo: 'Nota 2', descripcion: 'Descripcion 2' },
-         { id: '3', titulo: 'Nota 3', descripcion: 'Descripcion 3' }
-       ];
+       var notas = angular.fromJson(window.localStorage['notas'] || '[]');
+       function persit(){
+           window.localStorage['notas'] = angular.toJson(notas);
+       }
        return {
            list: function(){
                return notas;
@@ -18,11 +17,13 @@ var app = angular.module('starter.notestore', []);
            },
            create: function(nota){
                notas.push(nota);
+               persit();
            },
            update: function(nota){
                for(var i = 0;i<notas.length; i++){
                     if(notas[i].id === nota.id){
                         notas[i] = nota;
+                        persit();
                         return;
                     }
                 }
