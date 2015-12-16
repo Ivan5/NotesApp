@@ -1,28 +1,6 @@
 (function(){
-    var app = angular.module('starter', ['ionic', 'starter.controllers', 'starter.services'])
-    var notas = [
-         { id: '1', titulo: 'Nota 1', descripcion: 'Descripcion 1' },
-         { id: '2', titulo: 'Nota 2', descripcion: 'Descripcion 2' },
-         { id: '3', titulo: 'Nota 3', descripcion: 'Descripcion 3' }
-       ]; 
-    function getNota(id){
-        return notas.filter(function(nota){
-            return nota.id === id;
-        })[0];
-    }
+    var app = angular.module('starter', ['ionic', 'starter.notestore']);
     
-    function updateNota(nota){
-        for(var i = 0;i<notas.length; i++){
-            if(notas[i].id === nota.id){
-                notas[i] = nota;
-                return;
-            }
-        }
-    }
-    
-    function createNota(nota){
-        notas.push(nota);
-    }
     app.config(function($stateProvider, $urlRouterProvider){
         $stateProvider.state('list',{
            url:'/list',
@@ -42,23 +20,23 @@
         
         $urlRouterProvider.otherwise('/list');
     });
-    app.controller('listCtrl',function($scope){
-       $scope.notas = notas;
+    app.controller('listCtrl',function($scope,NoteStore){
+       $scope.notas = NoteStore.list();
     });
     
-    app.controller('EditCtrl',function($scope, $state){
+    app.controller('EditCtrl',function($scope, $state,NoteStore){
        $scope.id = $state.params.id; 
-       $scope.nota = angular.copy(getNota($scope.id));
+       $scope.nota = angular.copy(NoteStore.get($scope.id));
        $scope.save = function(){
-           updateNota($scope.nota);
+           NoteStore.update($scope.nota);
            $state.go('list');
        };
     });
     
-    app.controller('CreateCtrl',function($scope, $state){
+    app.controller('CreateCtrl',function($scope, $state,NoteStore){
        $scope.nota = {id: new Date().getTime().toString(), title:'', descripcion:''}
        $scope.save = function(){
-           createNota($scope.nota);
+           NoteStore.create($scope.nota);
            $state.go('list');
        };
     });
