@@ -27,6 +27,15 @@ var app = angular.module('starter.notestore', []);
                         return;
                     }
                 }
+           },
+           remove: function(id){
+               for(var i = 0;i<notas.length; i++){
+                    if(notas[i].id === id){
+                        notas.splice(i, 1);
+                        persit();
+                        return;
+                    }
+                }
            }
        }; 
   });
